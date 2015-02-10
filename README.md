@@ -8,6 +8,8 @@ Plugin for redmine which allows pasting image data from the clipboard directly i
 * Drag and drop image files directly into the input element
 * Added to ticket as an attachment
 * Added into the comment text field using Redmine's markup language
+* Show inline images in email
+* Accept inline images from email
 
 ## Getting the plugin
 
@@ -20,6 +22,7 @@ To install the plugin clone the repro from github and migrate the database:
 ```
 cd /path/to/redmine/
 git clone git://github.com/credativUK/redmine_image_clipboard_paste.git plugins/redmine_image_clipboard_paste
+bundle
 rake db:migrate_plugins RAILS_ENV=production
 ```
 
@@ -29,6 +32,7 @@ To uninstall the plugin migrate the database back and remove the plugin:
 cd /path/to/redmine/
 rake db:migrate:plugin NAME=redmine_image_clipboard_paste VERSION=0 RAILS_ENV=production
 rm -rf plugins/redmine_image_clipboard_paste
+bundle
 ```
 
 Further information about plugin installation can be found at: http://www.redmine.org/wiki/redmine/Plugins
