@@ -48,12 +48,13 @@ module MailHandlerInlineImagesPatch
 
       # strip html tags and remove doctype directive
       if parts.any? {|p| p.mime_type == 'text/html'}
+        is_textile = Setting.text_formatting == 'textile'
         plain_text_body.gsub!(FIND_IMG_SRC_PATTERN) do
           filename = nil
           $2.match(/^cid:(.+)/) do |m|
             filename = email.all_parts.find {|p| p.cid == m[1]}.filename
           end
-          " !#{filename}! "
+          is_textile ? " !#{filename}! " : " ![](#{filename}) "
         end
 
         redmine_from = Setting.mail_from
@@ -97,7 +98,8 @@ module MailHandlerInlineImagesPatch
           ],
         )
         plain_text_body = cleanup_body(plain_text_body << "\n") # \n fixes cleanup bug
-        plain_text_body.gsub!(/^[ \t]+(![^!]+!)/, '\1') # fix for images
+        regex = is_textile ? /^[ \t]+(![^!]+!)/ : /^[ \t]+(!\[\]\([^)]+\))/
+        plain_text_body.gsub!(regex, '\1') # fix for images
       end
       @cleaned_up_text_body = plain_text_body.strip
     end
